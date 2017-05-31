@@ -27,10 +27,9 @@
           </select>
       	</label>        
         <label class="item item-input">
-          <span class="input-label">No of Drivers : {{design.nod}}</span>
-          <input type="range" name="volume" min="1" max="8" ng-model="design.nod" ng-change="calPort(design)">
-        </label>
-        
+          <span class="input-label">No of Drivers</span>
+          <!--<input type="tel" name="volume" ng-model="design.nod" ng-change="calPort(design)">-->
+        </label>        
         <div class="button-bar">
           <a class="button" 
             ng-repeat="item in count" 
@@ -43,7 +42,7 @@
         <h5>Recomended Net Air Volume {{design.driver.recPortedVb * design.nod}} liters</h5>
       	<label class="item item-input">
           <span class="input-label">Vb</span>
-        	<input type="text" ng-model="design.vb" ng-change="calPort(design)" required>
+        	<input type="number" ng-model="design.vb" ng-change="calPort(design)" required>
           <span class="fade-label">liters</span>
       	</label>
         <h5>Recomended Fb {{design.driver.recPortedFb}} Hertz</h5>
@@ -54,7 +53,7 @@
         </label>
         <label class="item item-input">
           <span class="input-label">No of Ports : {{design.np}}</span>
-          <input type="range" name="volume" min="1" max="8" ng-model="design.np" ng-change="calPort(design)">
+          <input type="tel" ng-model="design.np" ng-change="calPort(design)">
         </label>
         <h5>Recomended Min Port Diameter {{design.dmin.rec.cm}}cm = {{design.dmin.rec.in}}in</h5>
         <label class="item item-input">

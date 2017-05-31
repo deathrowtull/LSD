@@ -192,7 +192,7 @@ angular.module('starter.controllers', [ 'ngStorage' ,'chart.js'])
     $scope.calPort(design);
   };
 
-  $scope.count = [1,2,3,3,4,5,6,7,8];
+  $scope.count = [1,2,3,4,5,6,7,8];
 
   //Converts port Dimensions to Centimeteres
   $scope.PortToCm = function(design) {

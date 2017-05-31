@@ -66,7 +66,7 @@
           <input type="text" ng-model="design.dmin.actual.in" ng-change="PortToCm(design)" required>
           <span class="fade-label">in</span>
         </label>
-        <h5>Flat Port Calculation : Area of Port {{design.port.area.cm}}cm<sup>2</sup> = {{design.port.area.in}}in<sup>2</sup></h5>
+        <!--<h5>Flat Port Calculation : Area of Port {{design.port.area.cm}}cm<sup>2</sup> = {{design.port.area.in}}in<sup>2</sup></h5>
         <label class="item item-input">
           <span class="input-label">Port Width</span>
           <input type="text" ng-model="design.port.width.cm" ng-change="PortToIn(design)" required>
@@ -86,9 +86,8 @@
           <span class="input-label">Port Height</span>
           <input type="text" ng-model="design.port.height.in" ng-change="PortAreaIn(design)">
           <span class="fade-label">in</span>
-        </label>
+        </label>-->
 
-        <h5></h5>
         <label class="item item-input">
           <span class="input-label">Port Length</span>
           <input type="text" ng-model="design.lv.cm" ng-change="PortToIn(design)" readonly>
@@ -111,6 +110,7 @@
           <input type="text" ng-model="design.dmin.outer.in" ng-change="BoxToCm(design)">
           <span class="fade-label">in</span>
         </label>
+        <h5></h5>
         <label class="item item-input">
           <span class="input-label">Internal Bracing</span>
           <input type="text" ng-model="design.bracing.cm" ng-change="BoxToIn(design)">

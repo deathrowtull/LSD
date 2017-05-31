@@ -27,16 +27,16 @@
         <label class="item item-input">
           <span class="input-label">Qes</span>
           <input type="text" ng-model="driver.qes" ng-change="calTS(driver)" required>
+        </label>        
+        <label class="item item-input">
+          <span class="input-label">Size</span>
+          <input type="text" ng-model="driver.size" ng-change="displacement(driver)" required>
+          <span class="fade-label">in</span>
         </label>
         <label class="item item-input">
           <span class="input-label">Sd</span>
           <input type="text" ng-model="driver.sd" required>
           <span class="fade-label">cm<sup>2</sup></span>
-        </label>
-        <label class="item item-input">
-          <span class="input-label">Size</span>
-          <input type="text" ng-model="driver.size" ng-change="displacement(driver)" required>
-          <span class="fade-label">in</span>
         </label>
         <h5>Estimate Only! please enter actual displacement if available</h5>
         <label class="item item-input">

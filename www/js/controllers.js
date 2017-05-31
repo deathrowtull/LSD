@@ -427,6 +427,28 @@ angular.module('starter.controllers', [ 'ngStorage' ,'chart.js'])
     var ro = 1.18;
     var c = 345;
 
+    if(driver.size == 6){
+      driver.sd = 125;
+    }
+    if(driver.size == 6){
+      driver.sd = 165;
+    }
+    if(driver.size == 8){
+      driver.sd = 220;
+    }
+    if(driver.size == 10){
+      driver.sd = 220;
+    }
+    if(driver.size == 12){
+      driver.sd = 530;
+    }
+    if(driver.size == 15){
+      driver.sd = 890;
+    }
+    if(driver.size == 18){
+      driver.sd = 1300;
+    }
+
     driver.recSealedVb = 0;
     driver.recSealedFb = 0;
     driver.recPortedVb = 20 * driver.vas * (Math.pow( driver.qts , 3.3));
@@ -463,6 +485,30 @@ angular.module('starter.controllers', [ 'ngStorage' ,'chart.js'])
   };
 
   $scope.displacement = function(driver) {
+    console.log("hello");
+
+    if(driver.size == 6){
+      driver.sd = 125;
+    }
+    if(driver.size == 6){
+      driver.sd = 165;
+    }
+    if(driver.size == 8){
+      driver.sd = 220;
+    }
+    if(driver.size == 10){
+      driver.sd = 220;
+    }
+    if(driver.size == 12){
+      driver.sd = 530;
+    }
+    if(driver.size == 15){
+      driver.sd = 890;
+    }
+    if(driver.size == 18){
+      driver.sd = 1300;
+    }
+
     driver.dd3 = Math.round(100 *(Math.pow(((driver.size-1)/3), 2) * 3.14) * (driver.size / 2) * 0.016) / 100;
   };
 
@@ -471,7 +517,7 @@ angular.module('starter.controllers', [ 'ngStorage' ,'chart.js'])
 
     var pi = 3.14;
     var ro = 1.18;
-    var c = 345;
+    var c = 345;    
 
     driver.recSealedVb = 0;
     driver.recSealedFb = 0;

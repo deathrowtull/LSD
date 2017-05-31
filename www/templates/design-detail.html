@@ -1,7 +1,7 @@
 <ion-view view-title="DESIGN > {{design.name}} : {{design.driver.brand}} : {{design.driver.model}}: {{design.type}} : {{design.vb}}l : {{design.fb}}hz">
   <ion-nav-buttons class="has-header" side="right">
-    <button class="button" ng-click="usShow()"> US </button>
-    <button class="button" ng-click="metricShow()">Metric</button>
+    <button class="button" ng-click="ShowUS()"> US </button>
+    <button class="button" ng-click="ShowMetric()">Metric</button>
   </ion-nav-buttons>
   </ion-nav-buttons>
   <ion-content class="padding">    
@@ -39,6 +39,19 @@
               {{item}}
           </a>
         </div>
+        <label class="item item-input">
+          <span class="input-label">No of Ports</span>
+        </label>
+        <div class="button-bar">
+          <a class="button" 
+            ng-repeat="item in count" 
+            ng-click="design.np = item"
+            ng-class="{'active' : item === design.np}" 
+            ng-model="design.np">
+              {{item}}
+          </a>
+        </div>
+
         <h5>Recomended Net Air Volume {{design.driver.recPortedVb * design.nod}} liters</h5>
       	<label class="item item-input">
           <span class="input-label">Vb</span>
@@ -51,10 +64,7 @@
           <input type="text" ng-model="design.fb" ng-change="calPort(design)" required>
           <span class="fade-label">Hz</span>
         </label>
-        <label class="item item-input">
-          <span class="input-label">No of Ports : {{design.np}}</span>
-          <input type="tel" ng-model="design.np" ng-change="calPort(design)">
-        </label>
+        
         <h5>Recomended Min Port Diameter {{design.dmin.rec.cm}}cm = {{design.dmin.rec.in}}in</h5>
         <label class="item item-input">
           <span class="input-label">Port Diameter</span>
@@ -66,6 +76,7 @@
           <input type="text" ng-model="design.dmin.actual.in" ng-change="PortToCm(design)" required>
           <span class="fade-label">in</span>
         </label>
+
         <!--<h5>Flat Port Calculation : Area of Port {{design.port.area.cm}}cm<sup>2</sup> = {{design.port.area.in}}in<sup>2</sup></h5>
         <label class="item item-input">
           <span class="input-label">Port Width</span>

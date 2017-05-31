@@ -204,18 +204,18 @@ angular.module('starter.controllers', [ 'ngStorage' ,'chart.js'])
 
   //Converts port Dimensions to Inches
   $scope.PortToIn = function(design) {
-    design.dmin.actual.in = (Math.round(100 * (design.dmin.actual.cm / 2.54)))/ 100;
-    design.port.width.in = (Math.round(100 * (design.port.width.cm / 2.54)))/ 100;
-    design.port.height.in = (Math.round(100 * (design.port.height.cm / 2.54)))/ 100;
-    $scope.calPort(design);
+    //design.dmin.actual.in = (Math.round(100 * (design.dmin.actual.cm / 2.54)))/ 100;
+    //design.port.width.in = (Math.round(100 * (design.port.width.cm / 2.54)))/ 100;
+    //design.port.height.in = (Math.round(100 * (design.port.height.cm / 2.54)))/ 100;
+    //$scope.calPort(design);
   };
 
   $scope.PortAreaIn = function(design) {
-    design.port.height.cm = design.port.height.in * 2.54;
-    design.port.area.cm = design.port.height.cm * design.port.width.cm;
-    design.dmin.actual.cm = Math.sqrt((design.port.area.cm / 3.14) / 2);
-    design.dmin.actual.in = design.dmin.actual.cm / 2.54;
-    $scope.calPort(design);
+    //design.port.height.cm = design.port.height.in * 2.54;
+    //design.port.area.cm = design.port.height.cm * design.port.width.cm;
+    //design.dmin.actual.cm = Math.sqrt((design.port.area.cm / 3.14) / 2);
+    //design.dmin.actual.in = design.dmin.actual.cm / 2.54;
+    //$scope.calPort(design);
   };
 
   //Port Calculations
@@ -325,11 +325,11 @@ angular.module('starter.controllers', [ 'ngStorage' ,'chart.js'])
   };
 
   $scope.BoxToIn = function(design) {
-    design.dmin.outer.in = design.dmin.outer.cm / 2.54;
-    design.bracing.in = design.bracing.cm / 2.54;
-    design.box.width.in = design.box.width.cm / 2.54;
-    design.box.height.in = design.box.height.cm / 2.54;
-    $scope.calBox(design);
+    //design.dmin.outer.in = design.dmin.outer.cm / 2.54;
+    //design.bracing.in = design.bracing.cm / 2.54;
+    //design.box.width.in = design.box.width.cm / 2.54;
+    //design.box.height.in = design.box.height.cm / 2.54;
+    //$scope.calBox(design);
   };
 
   $scope.calBox = function(design) {     

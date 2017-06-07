@@ -132,6 +132,7 @@ angular.module('starter.services', ['ionic', 'ngStorage'])
   };
 })
 
+//code for displaying and comparing designs in Simulate window
 .factory ('Series', function ($localStorage) {
 
   $localStorage = $localStorage.$default({

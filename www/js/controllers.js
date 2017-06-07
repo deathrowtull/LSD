@@ -178,6 +178,8 @@ angular.module('starter.controllers', [ 'ngStorage' ,'chart.js'])
     $state.go('tab.design');
   };  
 
+  
+
   $scope.addDriver = function(design) {
     design.driver = Drivers.get(design.driverID);
 
@@ -192,7 +194,8 @@ angular.module('starter.controllers', [ 'ngStorage' ,'chart.js'])
     $scope.calPort(design);
   };
 
-  $scope.count = [1,2,3,4,5,6,7,8];
+  $scope.driverSelect = [1,2,3,4,5,6,7,8];
+  $scope.portSelect = [1,2,3,4,5,6,7,8];
 
   //Converts port Dimensions to Centimeteres
   $scope.PortToCm = function(design) {

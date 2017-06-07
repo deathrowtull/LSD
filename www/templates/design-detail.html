@@ -14,7 +14,7 @@
         <label class="item item-input item-select">
           <span class="input-label">Driver</span>
           <select 
-            ng-model="design.driverID" 
+            ng-model="design.driverID"
             ng-options="driver.id as driver.brandModel group by driver.size for driver in drivers | orderBy : 'size' : false"
             ng-change="addDriver(design)">  
           </select>
@@ -32,7 +32,7 @@
         </label>        
         <div class="button-bar">
           <a class="button" 
-            ng-repeat="item in count" 
+            ng-repeat="item in driverSelect" 
             ng-click="design.nod = item"
             ng-class="{'active' : item === design.nod}" 
             ng-model="design.nod">
@@ -44,7 +44,7 @@
         </label>
         <div class="button-bar">
           <a class="button" 
-            ng-repeat="item in count" 
+            ng-repeat="item in portSelect" 
             ng-click="design.np = item"
             ng-class="{'active' : item === design.np}" 
             ng-model="design.np">

@@ -132,6 +132,31 @@ angular.module('starter.services', ['ionic', 'ngStorage'])
   };
 })
 
+.factory ('Settings', function ($localStorage) {
+
+  $localStorage = $localStorage.$default({
+    settings: [{ metric : true }]
+  });
+
+  var all = function () {
+    return $localStorage.settings;
+  };
+
+  var add = function (data) {    
+    $localStorage.settings.push(data);
+  }  
+
+  var clear = function () {
+    $localStorage.settings = [];
+  }
+
+  return {
+      all: all,
+      add: add,
+      clear: clear
+  };
+})
+
 //code for displaying and comparing designs in Simulate window
 .factory ('Series', function ($localStorage) {
 

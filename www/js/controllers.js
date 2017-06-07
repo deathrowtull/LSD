@@ -165,20 +165,30 @@ angular.module('starter.controllers', [ 'ngStorage' ,'chart.js'])
   };
 })
 
-.controller('DesignDetailCtrl', function($scope, $stateParams, Designs, Drivers, Types, $state) {
+.controller('DesignDetailCtrl', function($scope, $stateParams, Designs, Settings, Drivers, Types, $state) {
   $scope.drivers = Drivers.all();
   $scope.designs = Designs.all();
   $scope.design = Designs.get($stateParams.designId);
   $scope.types = Types.all();
+  $scope.settings = Settings.all();
 
   console.log($scope.design);
+  console.log($scope.settings);
 
   $scope.editDesign = function(design) {
     Designs.edit(design);
     $state.go('tab.design');
   };  
 
-  
+  $scope.ShowUS = function() {
+    $scope.settings[0].metric = false;
+    //console.log($scope.settings[0].metric)
+  };   
+
+  $scope.ShowMetric = function() {
+    $scope.settings[0].metric = true;
+    //console.log($scope.settings[0].metric)
+  };   
 
   $scope.addDriver = function(design) {
     design.driver = Drivers.get(design.driverID);
@@ -210,7 +220,7 @@ angular.module('starter.controllers', [ 'ngStorage' ,'chart.js'])
     //design.dmin.actual.in = (Math.round(100 * (design.dmin.actual.cm / 2.54)))/ 100;
     //design.port.width.in = (Math.round(100 * (design.port.width.cm / 2.54)))/ 100;
     //design.port.height.in = (Math.round(100 * (design.port.height.cm / 2.54)))/ 100;
-    //$scope.calPort(design);
+    $scope.calPort(design);
   };
 
   $scope.PortAreaIn = function(design) {
@@ -218,7 +228,7 @@ angular.module('starter.controllers', [ 'ngStorage' ,'chart.js'])
     //design.port.area.cm = design.port.height.cm * design.port.width.cm;
     //design.dmin.actual.cm = Math.sqrt((design.port.area.cm / 3.14) / 2);
     //design.dmin.actual.in = design.dmin.actual.cm / 2.54;
-    //$scope.calPort(design);
+    $scope.calPort(design);
   };
 
   //Port Calculations

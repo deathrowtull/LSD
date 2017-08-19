@@ -462,6 +462,8 @@ angular.module('starter.controllers', [ 'ngStorage' ,'chart.js'])
       driver.sd = 1300;
     }
 
+    driver.dd3 = Math.round(100 *(Math.pow(((driver.size-1)/3), 2) * 3.14) * (driver.size / 2) * 0.016) / 100;
+
     driver.recSealedVb = 0;
     driver.recSealedFb = 0;
     driver.recPortedVb = 20 * driver.vas * (Math.pow( driver.qts , 3.3));

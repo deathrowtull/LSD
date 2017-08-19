@@ -165,18 +165,30 @@ angular.module('starter.controllers', [ 'ngStorage' ,'chart.js'])
   };
 })
 
-.controller('DesignDetailCtrl', function($scope, $stateParams, Designs, Drivers, Types, $state) {
+.controller('DesignDetailCtrl', function($scope, $stateParams, Designs, Settings, Drivers, Types, $state) {
   $scope.drivers = Drivers.all();
   $scope.designs = Designs.all();
   $scope.design = Designs.get($stateParams.designId);
   $scope.types = Types.all();
+  $scope.settings = Settings.all();
 
   console.log($scope.design);
+  console.log($scope.settings);
 
   $scope.editDesign = function(design) {
     Designs.edit(design);
     $state.go('tab.design');
   };  
+
+  $scope.ShowUS = function() {
+    $scope.settings[0].metric = false;
+    //console.log($scope.settings[0].metric)
+  };   
+
+  $scope.ShowMetric = function() {
+    $scope.settings[0].metric = true;
+    //console.log($scope.settings[0].metric)
+  };   
 
   $scope.addDriver = function(design) {
     design.driver = Drivers.get(design.driverID);
@@ -192,7 +204,8 @@ angular.module('starter.controllers', [ 'ngStorage' ,'chart.js'])
     $scope.calPort(design);
   };
 
-  $scope.count = [1,2,3,4,5,6,7,8];
+  $scope.driverSelect = [1,2,3,4,5,6,7,8];
+  $scope.portSelect = [1,2,3,4,5,6,7,8];
 
   //Converts port Dimensions to Centimeteres
   $scope.PortToCm = function(design) {
@@ -204,17 +217,17 @@ angular.module('starter.controllers', [ 'ngStorage' ,'chart.js'])
 
   //Converts port Dimensions to Inches
   $scope.PortToIn = function(design) {
-    design.dmin.actual.in = (Math.round(100 * (design.dmin.actual.cm / 2.54)))/ 100;
-    design.port.width.in = (Math.round(100 * (design.port.width.cm / 2.54)))/ 100;
-    design.port.height.in = (Math.round(100 * (design.port.height.cm / 2.54)))/ 100;
+    //design.dmin.actual.in = (Math.round(100 * (design.dmin.actual.cm / 2.54)))/ 100;
+    //design.port.width.in = (Math.round(100 * (design.port.width.cm / 2.54)))/ 100;
+    //design.port.height.in = (Math.round(100 * (design.port.height.cm / 2.54)))/ 100;
     $scope.calPort(design);
   };
 
   $scope.PortAreaIn = function(design) {
-    design.port.height.cm = design.port.height.in * 2.54;
-    design.port.area.cm = design.port.height.cm * design.port.width.cm;
-    design.dmin.actual.cm = Math.sqrt((design.port.area.cm / 3.14) / 2);
-    design.dmin.actual.in = design.dmin.actual.cm / 2.54;
+    //design.port.height.cm = design.port.height.in * 2.54;
+    //design.port.area.cm = design.port.height.cm * design.port.width.cm;
+    //design.dmin.actual.cm = Math.sqrt((design.port.area.cm / 3.14) / 2);
+    //design.dmin.actual.in = design.dmin.actual.cm / 2.54;
     $scope.calPort(design);
   };
 
@@ -325,11 +338,11 @@ angular.module('starter.controllers', [ 'ngStorage' ,'chart.js'])
   };
 
   $scope.BoxToIn = function(design) {
-    design.dmin.outer.in = design.dmin.outer.cm / 2.54;
-    design.bracing.in = design.bracing.cm / 2.54;
-    design.box.width.in = design.box.width.cm / 2.54;
-    design.box.height.in = design.box.height.cm / 2.54;
-    $scope.calBox(design);
+    //design.dmin.outer.in = design.dmin.outer.cm / 2.54;
+    //design.bracing.in = design.bracing.cm / 2.54;
+    //design.box.width.in = design.box.width.cm / 2.54;
+    //design.box.height.in = design.box.height.cm / 2.54;
+    //$scope.calBox(design);
   };
 
   $scope.calBox = function(design) {     
@@ -427,6 +440,28 @@ angular.module('starter.controllers', [ 'ngStorage' ,'chart.js'])
     var ro = 1.18;
     var c = 345;
 
+    if(driver.size == 6){
+      driver.sd = 125;
+    }
+    if(driver.size == 6){
+      driver.sd = 165;
+    }
+    if(driver.size == 8){
+      driver.sd = 220;
+    }
+    if(driver.size == 10){
+      driver.sd = 220;
+    }
+    if(driver.size == 12){
+      driver.sd = 530;
+    }
+    if(driver.size == 15){
+      driver.sd = 890;
+    }
+    if(driver.size == 18){
+      driver.sd = 1300;
+    }
+
     driver.recSealedVb = 0;
     driver.recSealedFb = 0;
     driver.recPortedVb = 20 * driver.vas * (Math.pow( driver.qts , 3.3));
@@ -463,6 +498,30 @@ angular.module('starter.controllers', [ 'ngStorage' ,'chart.js'])
   };
 
   $scope.displacement = function(driver) {
+    console.log("hello");
+
+    if(driver.size == 6){
+      driver.sd = 125;
+    }
+    if(driver.size == 6){
+      driver.sd = 165;
+    }
+    if(driver.size == 8){
+      driver.sd = 220;
+    }
+    if(driver.size == 10){
+      driver.sd = 220;
+    }
+    if(driver.size == 12){
+      driver.sd = 530;
+    }
+    if(driver.size == 15){
+      driver.sd = 890;
+    }
+    if(driver.size == 18){
+      driver.sd = 1300;
+    }
+
     driver.dd3 = Math.round(100 *(Math.pow(((driver.size-1)/3), 2) * 3.14) * (driver.size / 2) * 0.016) / 100;
   };
 
@@ -471,7 +530,7 @@ angular.module('starter.controllers', [ 'ngStorage' ,'chart.js'])
 
     var pi = 3.14;
     var ro = 1.18;
-    var c = 345;
+    var c = 345;    
 
     driver.recSealedVb = 0;
     driver.recSealedFb = 0;

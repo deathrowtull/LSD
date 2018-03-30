@@ -1,108 +1,173 @@
 angular.module('starter.controllers', [ 'ngStorage' ,'chart.js'])
 
-.controller('SimCtrl', function($scope, Datum, Series, Designs) {
+.controller('DriverCtrl', function($scope, Drivers, Datum, Series, $ionicModal) {
 
-  $scope.designs = Designs.all();
-  $scope.datum = Datum.all();
-  $scope.series = Series.all();  
+  $scope.drivers = Drivers.all();
 
-  //console.log($scope.datum);
+  $ionicModal.fromTemplateUrl('templates/modalDriver.html', {
+    scope: $scope
+  }).then(function(modal) {
+    $scope.modal = modal;
+  });
 
-  $scope.toggleSim = function (design) {
-    Designs.edit(design);
-    Datum.clear();
-    Series.clear();
-
-    angular.forEach($scope.designs, function(design,value) { 
-      if(design.sim){   
-        Datum.add(design.splData[0]);
-        Series.add(design.name);           
-      }
-    }); 
-
-    $scope.datum = Datum.all();
-    $scope.series = Series.all(); 
+  $scope.createDriver = function(driver) {      
+    $scope.calTS(driver);          
   };
-  
-  $scope.colors = [{
-    fill: false,
-    borderColor: "#ff0000",
-    backgroundColor: "#ff0000"   
-  },{
-    fill: false,
-    borderColor: "#ff9400",
-    backgroundColor: "#ff9400"
-  },{
-    fill: false,
-    borderColor: "#778fff",
-    backgroundColor: "#778fff"
-  },{
-    fill: false,
-    borderColor: "#77ff90",
-    backgroundColor: "#77ff90"
-  },{
-    fill: false,
-    borderColor: "#ffa100",
-    backgroundColor: "#ffa100"
-  },{
-    fill: false,
-    borderColor: "#ff00e1",
-    backgroundColor: "#ff00e1"
-  },{
-    fill: false,
-    borderColor: "#ffe500",
-    backgroundColor: "#ffe500"
-  },{
-    fill: false,
-    borderColor: "#00ffed",
-    backgroundColor: "#00ffed"
-  }];
-  $scope.options = {
-    elements: {
-      point: {
-        radius: 1.5
-      }
+
+  $scope.remove = function(driver) {
+    Drivers.remove(driver);
+  };
+
+  //Calculate Driver Param
+  $scope.calTS = function(driver) {
+
+    var pi = 3.14;
+    var ro = 1.18;
+    var c = 345;
+
+    if(driver.size == 6){
+      driver.sd = 125;
+    }
+    if(driver.size == 6){
+      driver.sd = 165;
+    }
+    if(driver.size == 8){
+      driver.sd = 220;
+    }
+    if(driver.size == 10){
+      driver.sd = 220;
+    }
+    if(driver.size == 12){
+      driver.sd = 530;
+    }
+    if(driver.size == 15){
+      driver.sd = 890;
+    }
+    if(driver.size == 18){
+      driver.sd = 1300;
+    }
+
+    driver.dd3 = Math.round(100 *(Math.pow(((driver.size-1)/3), 2) * 3.14) * (driver.size / 2) * 0.016) / 100;
+
+    driver.recSealedVb = 0;
+    driver.recSealedFb = 0;
+    driver.recPortedVb = 20 * driver.vas * (Math.pow( driver.qts , 3.3));
+    driver.recPortedVb = (Math.round(100 * driver.recPortedVb))/ 100;
+    driver.recPortedF3 = Math.pow((driver.vas/driver.recPortedVb), 0.44) * driver.fs;
+    driver.recPortedF3 = (Math.round(100 * driver.recPortedF3))/ 100;
+    driver.recPortedFb = Math.pow((driver.vas/driver.recPortedVb), 0.31) * driver.fs;
+    driver.recPortedFb = (Math.round(100 * driver.recPortedFb))/ 100;
+    
+    driver.ebp = driver.fs / driver.qes;
+    driver.qts =  1/((1/driver.qms) + (1/driver.qes));
+    driver.vd = (driver.sd*driver.xmax)/10;
+    driver.n0 = 9.64 * Math.pow(10, -10) * Math.pow(driver.fs, 3) * driver.vas/driver.qes;
+    driver.spl = 112 + 10 * Math.log10(driver.n0);
+    driver.k1 = (4 * Math.pow(pi, 3) * ro / c) * Math.pow(driver.fs, 4) * Math.pow((driver.vd/1000000), 2);
+    driver.k2 = 112 + 10 * Math.log10(driver.k1);
+    driver.par = 3 * Math.pow(driver.recPortedF3, 4) * Math.pow(driver.vd, 2);
+    driver.per = driver.par / driver.n0;
+    driver.peakSPL = driver.spl + 10 * Math.log10(driver.rms);   
+    driver.brandModel = driver.brand + ' : ' + driver.model;
+    
+    Drivers.add(driver);
+    $scope.modal.hide();
+    console.log(driver);
+  };
+})
+
+.controller('DriverDetailCtrl', function($scope, $stateParams, Drivers, Datum, Series, $state) {
+  $scope.driver = Drivers.get($stateParams.driverId);  
+
+  $scope.editDriver = function(driver) {
+    Drivers.edit(driver);
+    $state.go('tab.driver');
+  };
+
+  $scope.displacement = function(driver) {
+    console.log("hello");
+
+    if(driver.size == 6){
+      driver.sd = 125;
+    }
+    if(driver.size == 6){
+      driver.sd = 165;
+    }
+    if(driver.size == 8){
+      driver.sd = 220;
+    }
+    if(driver.size == 10){
+      driver.sd = 220;
+    }
+    if(driver.size == 12){
+      driver.sd = 530;
+    }
+    if(driver.size == 15){
+      driver.sd = 890;
+    }
+    if(driver.size == 18){
+      driver.sd = 1300;
+    }
+
+    driver.dd3 = Math.round(100 *(Math.pow(((driver.size-1)/3), 2) * 3.14) * (driver.size / 2) * 0.016) / 100;
+  };
+
+  //Calculate Driver Param
+  $scope.calTS = function(driver) {
+
+    var pi = 3.14;
+    var ro = 1.18;
+    var c = 345;    
+
+    driver.recSealedVb = 0;
+    driver.recSealedFb = 0;
+    driver.recPortedVb = 20 * driver.vas * (Math.pow( driver.qts , 3.3));
+    driver.recPortedVb = (Math.round(100 * driver.recPortedVb))/ 100;
+    driver.recPortedF3 = Math.pow((driver.vas/driver.recPortedVb), 0.44) * driver.fs;
+    driver.recPortedF3 = (Math.round(100 * driver.recPortedF3))/ 100;
+    driver.recPortedFb = Math.pow((driver.vas/driver.recPortedVb), 0.31) * driver.fs;
+    driver.recPortedFb = (Math.round(100 * driver.recPortedFb))/ 100;
+    
+    driver.ebp = driver.fs / driver.qes;
+    driver.qts =  1/((1/driver.qms) + (1/driver.qes));
+    driver.vd = (driver.sd*driver.xmax)/10;
+    driver.n0 = 9.64 * Math.pow(10, -10) * Math.pow(driver.fs, 3) * driver.vas/driver.qes;
+    driver.spl = 112 + 10 * Math.log10(driver.n0);
+    driver.k1 = (4 * Math.pow(pi, 3) * ro / c) * Math.pow(driver.fs, 4) * Math.pow((driver.vd/1000000), 2);
+    driver.k2 = 112 + 10 * Math.log10(driver.k1);
+    driver.par = 3 * Math.pow(driver.recPortedF3, 4) * Math.pow(driver.vd, 2);
+    driver.per = driver.par / driver.n0;
+    driver.peakSPL = driver.spl + 10 * Math.log10(driver.rms);  
+    driver.brandModel = driver.brand + ' : ' + driver.model; 
+
+    console.log(driver);
+  };
+
+  //calls calTS when the Controller Loads
+  $scope.calTS($scope.driver);
+})
+.directive('barSelect',function($parse){
+  return {
+    restrict: 'A',
+    require: 'ngModel',
+    scope: {
+      model: '=ngModel',
+      value: '=barSelect'
     },
-    legend: {display: true},
-    scales: {
-      xAxes: [{
-        id: 'x-axis-1',
-        type: 'logarithmic',
-        display: true,
-        position: 'bottom',
-        scaleLabel: {
-          display: true,
-          labelString: 'Frequency'
-        },
-        ticks: {                          
-          userCallback: function(tick) {
-            var remain = tick / (Math.pow(10, Math.floor(Chart.helpers.log10(tick))));
-            if (remain === 1) {
-              var test = tick.toString();
-              if(test >= 1000 && test < 1000000){
-                  return tick/1000 + "kHz";
-              }else if(test >= 1000000 && test < 1000000000){
-                  return tick/1000000 + "MHz";
-              }else if(test >= 1000000000){
-                  return tick/1000000000 + "GHz";
-              }else {
-                  return tick.toString() + "Hz";
-              }
-            }
-            return '';
-          }
+    link: function(scope, element, attrs, ngModelCtrl){
+      element.addClass('button');
+      element.on('click', function(e){
+        scope.$apply(function(){
+          ngModelCtrl.$setViewValue(scope.value);
+        });
+      });
+      
+      scope.$watch('model', function(newVal){
+        element.removeClass('active');
+        if (newVal === scope.value){
+          element.addClass('active');
         }
-      }],
-      yAxes: [{
-        id: 'y-axis-1',
-        type: 'linear',
-        display: true,
-        position: 'left',
-        scaleLabel: {
-          display: true,
-          labelString: 'DB'
-        },
-      }]    
+      });
     }
   };
 })
@@ -165,15 +230,13 @@ angular.module('starter.controllers', [ 'ngStorage' ,'chart.js'])
   };
 })
 
-.controller('DesignDetailCtrl', function($scope, $stateParams, Designs, Settings, Drivers, Types, $state) {
+.controller('DesignDetailCtrl', function($scope, $stateParams, Designs, Drivers, Types, $state) {
   $scope.drivers = Drivers.all();
   $scope.designs = Designs.all();
   $scope.design = Designs.get($stateParams.designId);
   $scope.types = Types.all();
-  $scope.settings = Settings.all();
 
   console.log($scope.design);
-  console.log($scope.settings);
 
   $scope.editDesign = function(design) {
     Designs.edit(design);
@@ -415,174 +478,109 @@ angular.module('starter.controllers', [ 'ngStorage' ,'chart.js'])
   };  
 })
 
-.controller('DriverCtrl', function($scope, Drivers, Datum, Series, $ionicModal) {
+.controller('SimCtrl', function($scope, Datum, Series, Designs) {
 
-  $scope.drivers = Drivers.all();
+  $scope.designs = Designs.all();
+  $scope.datum = Datum.all();
+  $scope.series = Series.all();  
 
-  $ionicModal.fromTemplateUrl('templates/modalDriver.html', {
-    scope: $scope
-  }).then(function(modal) {
-    $scope.modal = modal;
-  });
+  //console.log($scope.datum);
 
-  $scope.createDriver = function(driver) {      
-    $scope.calTS(driver);          
+  $scope.toggleSim = function (design) {
+    Designs.edit(design);
+    Datum.clear();
+    Series.clear();
+
+    angular.forEach($scope.designs, function(design,value) { 
+      if(design.sim){   
+        Datum.add(design.splData[0]);
+        Series.add(design.name);           
+      }
+    }); 
+
+    $scope.datum = Datum.all();
+    $scope.series = Series.all(); 
   };
-
-  $scope.remove = function(driver) {
-    Drivers.remove(driver);
-  };
-
-  //Calculate Driver Param
-  $scope.calTS = function(driver) {
-
-    var pi = 3.14;
-    var ro = 1.18;
-    var c = 345;
-
-    if(driver.size == 6){
-      driver.sd = 125;
-    }
-    if(driver.size == 6){
-      driver.sd = 165;
-    }
-    if(driver.size == 8){
-      driver.sd = 220;
-    }
-    if(driver.size == 10){
-      driver.sd = 220;
-    }
-    if(driver.size == 12){
-      driver.sd = 530;
-    }
-    if(driver.size == 15){
-      driver.sd = 890;
-    }
-    if(driver.size == 18){
-      driver.sd = 1300;
-    }
-
-    driver.dd3 = Math.round(100 *(Math.pow(((driver.size-1)/3), 2) * 3.14) * (driver.size / 2) * 0.016) / 100;
-
-    driver.recSealedVb = 0;
-    driver.recSealedFb = 0;
-    driver.recPortedVb = 20 * driver.vas * (Math.pow( driver.qts , 3.3));
-    driver.recPortedVb = (Math.round(100 * driver.recPortedVb))/ 100;
-    driver.recPortedF3 = Math.pow((driver.vas/driver.recPortedVb), 0.44) * driver.fs;
-    driver.recPortedF3 = (Math.round(100 * driver.recPortedF3))/ 100;
-    driver.recPortedFb = Math.pow((driver.vas/driver.recPortedVb), 0.31) * driver.fs;
-    driver.recPortedFb = (Math.round(100 * driver.recPortedFb))/ 100;
-    
-    driver.ebp = driver.fs / driver.qes;
-    driver.qts =  1/((1/driver.qms) + (1/driver.qes));
-    driver.vd = (driver.sd*driver.xmax)/10;
-    driver.n0 = 9.64 * Math.pow(10, -10) * Math.pow(driver.fs, 3) * driver.vas/driver.qes;
-    driver.spl = 112 + 10 * Math.log10(driver.n0);
-    driver.k1 = (4 * Math.pow(pi, 3) * ro / c) * Math.pow(driver.fs, 4) * Math.pow((driver.vd/1000000), 2);
-    driver.k2 = 112 + 10 * Math.log10(driver.k1);
-    driver.par = 3 * Math.pow(driver.recPortedF3, 4) * Math.pow(driver.vd, 2);
-    driver.per = driver.par / driver.n0;
-    driver.peakSPL = driver.spl + 10 * Math.log10(driver.rms);   
-    driver.brandModel = driver.brand + ' : ' + driver.model;
-    
-    Drivers.add(driver);
-    $scope.modal.hide();
-    console.log(driver);
-  };
-})
-
-.controller('DriverDetailCtrl', function($scope, $stateParams, Drivers, Datum, Series, $state) {
-  $scope.driver = Drivers.get($stateParams.driverId);  
-
-  $scope.editDriver = function(driver) {
-    Drivers.edit(driver);
-    $state.go('tab.driver');
-  };
-
-  $scope.displacement = function(driver) {
-    console.log("hello");
-
-    if(driver.size == 6){
-      driver.sd = 125;
-    }
-    if(driver.size == 6){
-      driver.sd = 165;
-    }
-    if(driver.size == 8){
-      driver.sd = 220;
-    }
-    if(driver.size == 10){
-      driver.sd = 220;
-    }
-    if(driver.size == 12){
-      driver.sd = 530;
-    }
-    if(driver.size == 15){
-      driver.sd = 890;
-    }
-    if(driver.size == 18){
-      driver.sd = 1300;
-    }
-
-    driver.dd3 = Math.round(100 *(Math.pow(((driver.size-1)/3), 2) * 3.14) * (driver.size / 2) * 0.016) / 100;
-  };
-
-  //Calculate Driver Param
-  $scope.calTS = function(driver) {
-
-    var pi = 3.14;
-    var ro = 1.18;
-    var c = 345;    
-
-    driver.recSealedVb = 0;
-    driver.recSealedFb = 0;
-    driver.recPortedVb = 20 * driver.vas * (Math.pow( driver.qts , 3.3));
-    driver.recPortedVb = (Math.round(100 * driver.recPortedVb))/ 100;
-    driver.recPortedF3 = Math.pow((driver.vas/driver.recPortedVb), 0.44) * driver.fs;
-    driver.recPortedF3 = (Math.round(100 * driver.recPortedF3))/ 100;
-    driver.recPortedFb = Math.pow((driver.vas/driver.recPortedVb), 0.31) * driver.fs;
-    driver.recPortedFb = (Math.round(100 * driver.recPortedFb))/ 100;
-    
-    driver.ebp = driver.fs / driver.qes;
-    driver.qts =  1/((1/driver.qms) + (1/driver.qes));
-    driver.vd = (driver.sd*driver.xmax)/10;
-    driver.n0 = 9.64 * Math.pow(10, -10) * Math.pow(driver.fs, 3) * driver.vas/driver.qes;
-    driver.spl = 112 + 10 * Math.log10(driver.n0);
-    driver.k1 = (4 * Math.pow(pi, 3) * ro / c) * Math.pow(driver.fs, 4) * Math.pow((driver.vd/1000000), 2);
-    driver.k2 = 112 + 10 * Math.log10(driver.k1);
-    driver.par = 3 * Math.pow(driver.recPortedF3, 4) * Math.pow(driver.vd, 2);
-    driver.per = driver.par / driver.n0;
-    driver.peakSPL = driver.spl + 10 * Math.log10(driver.rms);  
-    driver.brandModel = driver.brand + ' : ' + driver.model; 
-
-    console.log(driver);
-  };
-
-  //calls calTS when the Controller Loads
-  $scope.calTS($scope.driver);
-})
-.directive('barSelect',function($parse){
-  return {
-    restrict: 'A',
-    require: 'ngModel',
-    scope: {
-      model: '=ngModel',
-      value: '=barSelect'
+  
+  $scope.colors = [{
+    fill: false,
+    borderColor: "#ff0000",
+    backgroundColor: "#ff0000"   
+  },{
+    fill: false,
+    borderColor: "#ff9400",
+    backgroundColor: "#ff9400"
+  },{
+    fill: false,
+    borderColor: "#778fff",
+    backgroundColor: "#778fff"
+  },{
+    fill: false,
+    borderColor: "#77ff90",
+    backgroundColor: "#77ff90"
+  },{
+    fill: false,
+    borderColor: "#ffa100",
+    backgroundColor: "#ffa100"
+  },{
+    fill: false,
+    borderColor: "#ff00e1",
+    backgroundColor: "#ff00e1"
+  },{
+    fill: false,
+    borderColor: "#ffe500",
+    backgroundColor: "#ffe500"
+  },{
+    fill: false,
+    borderColor: "#00ffed",
+    backgroundColor: "#00ffed"
+  }];
+  $scope.options = {
+    elements: {
+      point: {
+        radius: 1.5
+      }
     },
-    link: function(scope, element, attrs, ngModelCtrl){
-      element.addClass('button');
-      element.on('click', function(e){
-        scope.$apply(function(){
-          ngModelCtrl.$setViewValue(scope.value);
-        });
-      });
-      
-      scope.$watch('model', function(newVal){
-        element.removeClass('active');
-        if (newVal === scope.value){
-          element.addClass('active');
+    legend: {display: true},
+    scales: {
+      xAxes: [{
+        id: 'x-axis-1',
+        type: 'logarithmic',
+        display: true,
+        position: 'bottom',
+        scaleLabel: {
+          display: true,
+          labelString: 'Frequency'
+        },
+        ticks: {                          
+          userCallback: function(tick) {
+            var remain = tick / (Math.pow(10, Math.floor(Chart.helpers.log10(tick))));
+            if (remain === 1) {
+              var test = tick.toString();
+              if(test >= 1000 && test < 1000000){
+                  return tick/1000 + "kHz";
+              }else if(test >= 1000000 && test < 1000000000){
+                  return tick/1000000 + "MHz";
+              }else if(test >= 1000000000){
+                  return tick/1000000000 + "GHz";
+              }else {
+                  return tick.toString() + "Hz";
+              }
+            }
+            return '';
+          }
         }
-      });
+      }],
+      yAxes: [{
+        id: 'y-axis-1',
+        type: 'linear',
+        display: true,
+        position: 'left',
+        scaleLabel: {
+          display: true,
+          labelString: 'DB'
+        },
+      }]    
     }
   };
 });

@@ -6,7 +6,7 @@
     <ion-list>
       <ion-item 
         class="item-remove-animate item-avatar item-icon-right" 
-        ng-repeat="driver in drivers" 
+        ng-repeat="driver in drivers | orderBy:'size'" 
         type="item-text-wrap" 
         href="#/tab/driver/{{driver.id}}">
         <h2>{{driver.brand}} - {{driver.model}}</h2>

@@ -189,40 +189,38 @@ angular.module('starter.controllers', [ 'ngStorage' ,'chart.js'])
     $scope.modal = modal;
   });
   
-  $scope.createDesign = function(design) {
-    design.bracing = new Object();
-    design.bracing.cm = 2.54;
-    design.bracing.in = 1;
-    design.box = new Object();
-    design.box.depth = new Object();
-    design.box.height = new Object();
-    design.box.width = new Object();
-    //design.depth = new Object();
-    design.dmin = new Object();
-    design.dmin.actual = new Object();
-    design.dmin.rec = new Object();
-    design.dmin.outer = new Object();
-    //design.dminRec = new Object();
-    //design.dminOuter = new Object();
-    //design.ib = new Object();
-    design.id = (new Date()).getTime();    
-    //design.height = new Object();
-    design.lv = new Object();
-    design.nod = 1; 
-    design.np = 1;     
-    //design.portAreaRec = new Object();    
-    //design.portArea = new Object();
-    design.port = new Object();
-    design.port.area = new Object();
-    design.port.height = new Object();
-    design.port.width = new Object();
-    design.splData = {'dataset' : []};  
-    design.type = "Ported";
-    //design.width = new Object();
-    Designs.add(design);
-    $scope.modal.hide();
+  $scope.createDesign = function(name) {
+    newDesign = new Object();
+    newDesign.name = name;
+    newDesign.bracing = new Object();
+    newDesign.bracing.cm = 2.54;
+    newDesign.bracing.in = 1;
+    newDesign.box = new Object();
+    newDesign.box.depth = new Object();
+    newDesign.box.height = new Object();
+    newDesign.box.width = new Object();
+    newDesign.dmin = new Object();
+    newDesign.dmin.actual = new Object();
+    newDesign.dmin.rec = new Object();
+    newDesign.dmin.outer = new Object();
+    newDesign.id = (new Date()).getTime();    
+    newDesign.lv = new Object();
+    newDesign.nod = 1; 
+    newDesign.np = 1;   
+    newDesign.port = new Object();
+    newDesign.port.area = new Object();
+    newDesign.port.height = new Object();
+    newDesign.port.width = new Object();
+    newDesign.splData = {'dataset' : []};  
+    newDesign.type = "Ported";
+    
+    Designs.add(newDesign);
+    $scope.modal.hide();    
+    $scope.id = newDesign.id    
+    newDesign = null;
+    console.log(newDesign);
     //takes you to the new driver desing where you can choose a driver
-    $location.path('/tab/design/' + design.id );
+    $location.path('/tab/design/' + $scope.id );    
   };
 
   $scope.remove = function (design) {
@@ -236,7 +234,7 @@ angular.module('starter.controllers', [ 'ngStorage' ,'chart.js'])
   $scope.design = Designs.get($stateParams.designId);
   $scope.types = Types.all();
 
-  console.log($scope.design);
+  //console.log($scope.design);
 
   $scope.editDesign = function(design) {
     Designs.edit(design);
